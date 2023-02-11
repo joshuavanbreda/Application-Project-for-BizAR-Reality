@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         head.transform.localRotation = Quaternion.Euler(0f, 0f, -xRotation);
-        playerCam.transform.localRotation = Quaternion.Euler(0f, 0f, -xRotation);
+        //playerCam.transform.localRotation = Quaternion.Euler(0f, 0f, -xRotation);
 
 
 
