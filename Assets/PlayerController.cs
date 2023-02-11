@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,31 +11,61 @@ public class PlayerController : MonoBehaviour
     public float horizontalInput;
     public float VerticalInput;
 
+    public CinemachineVirtualCamera vCam1;
+
+    public float sensitivity = 100f;
+    private float xRotation = 0f;
+
     public Camera playerCam;
     public GameObject head;
     public Animator anim;
 
+    private float maxLookHeigh = -1.5f;
+    private float minLookHeight = 3.25f;
+
+    public float verticalLookValue;
+
+    public Transform followTransform;
+
+    private void Start()
+    {
+        
+    }
+
+    void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.Equals(0, 0);
+            Debug.Log("Application is focussed");
+        }
+        else
+        {
+            Debug.Log("Application lost focus");
+        }
+    }
+
     void Update()
     {
+        //Mouse code
+        #region Mouse Controls
         MouseLook();
 
         if (Input.GetMouseButtonDown(0))
         {
             anim.SetBool("isHitting", true);
-            anim.SetBool("isIdle", false);
-            anim.SetBool("isWalking", false);
             // start animation from the beginning
             anim.Play("Hit", -1, 0f);
         }
         if (Input.GetMouseButtonUp(0))
         {
             anim.SetBool("isHitting", false);
-            anim.SetBool("isIdle", true);
         }
+        #endregion
 
-
-        //Movement
-
+        //Movement code
+        #region Movement Controls
         if (Input.GetKey(KeyCode.W))
         {
             //move forward
@@ -97,6 +128,7 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("isWalking", false);
                 anim.SetBool("isIdle", true);
             }
+        #endregion
     }
 
     void MouseLook()
@@ -106,9 +138,26 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxis("Mouse X") * turnSpeed;
         VerticalInput = Mathf.Clamp((Input.GetAxis("Mouse Y") * turnSpeed), -45, 45);
 
-        //Mathf.Clamp(horizontalInput, -90f, 90f);
+        verticalLookValue = Mathf.Clamp(Input.GetAxis("Mouse Y") * 10, -1.5f, 3.5f);
+        print(verticalLookValue);
+
+        float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
 
         transform.Rotate(Vector3.up, horizontalInput * Time.deltaTime);
         //head.transform.rotation = Quaternion.Euler(head.transform.rotation.x, head.transform.rotation.y, head.transform.rotation.z + VerticalInput);
+
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        head.transform.localRotation = Quaternion.Euler(0f, 0f, -xRotation);
+        playerCam.transform.localRotation = Quaternion.Euler(0f, 0f, -xRotation);
+
+
+
+
+
+
+
+
     }
 }
