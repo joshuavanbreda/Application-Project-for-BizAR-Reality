@@ -19,32 +19,6 @@ public class LightingManager : MonoBehaviour
     {
         StartCoroutine(UpdateTimeOfDay());
     }
-
-    //private void Update()
-    //{
-    //    if (Preset == null)
-    //        return;
-
-    //    if (Application.isPlaying)
-    //    {
-    //        ////(Replace with a reference to the game time)
-    //        //TimeOfDay += Time.deltaTime * rotationSpeed;
-    //        //TimeOfDay %= 24; //Modulus to ensure always between 0-24
-    //        //UpdateLighting(TimeOfDay / 24f);
-
-    //        System.DateTime currentTime = System.DateTime.Now;
-    //        TimeOfDay = currentTime.Hour + (currentTime.Minute / 60f) + (currentTime.Second / 3600f);
-    //        UpdateLighting(TimeOfDay / 24f);
-
-    //        System.TimeSpan timeSpan = System.TimeSpan.FromHours(TimeOfDay);
-    //        timeText.text = timeSpan.Hours.ToString("D2") + ":" + timeSpan.Minutes.ToString("D2") + ":" + timeSpan.Seconds.ToString("D2");
-    //    }
-    //    else
-    //    {
-    //        UpdateLighting(TimeOfDay / 24f);
-    //    }
-    //}
-
     private IEnumerator UpdateTimeOfDay()
     {
         while (true)

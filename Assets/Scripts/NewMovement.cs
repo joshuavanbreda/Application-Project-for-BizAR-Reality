@@ -17,7 +17,6 @@ public class NewMovement : MonoBehaviour
     public float hitDistance;
 
     public float sensitivity = 300f;
-    private float xRotation = 0f;
 
     private bool isGrounded = true;
 
@@ -38,21 +37,6 @@ public class NewMovement : MonoBehaviour
 
         isInitialized = true;
     }
-
-    //void OnApplicationFocus(bool hasFocus)
-    //{
-    //    if (hasFocus)
-    //    {
-    //        Cursor.lockState = CursorLockMode.Locked;
-    //        Cursor.Equals(0, 0);
-    //        Debug.Log("Application is focussed");
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("Application lost focus");
-    //    }
-    //}
-
     void FixedUpdate()
     {
         if (isInitialized)
@@ -114,7 +98,6 @@ public class NewMovement : MonoBehaviour
                 if (isGrounded)
                 {
                     transform.GetComponent<Rigidbody>().AddForce(Vector3.up * 50f, ForceMode.Impulse);
-                    //StartCoroutine(JumpWaitTimer());
                     isGrounded = false;
                 }
             }
@@ -139,7 +122,7 @@ public class NewMovement : MonoBehaviour
             Rigidbody rb = hit.collider.GetComponent<Rigidbody>();                                              // get enenmy collider
             if (rb != null)
             {
-                audioController.ChangeSound();
+                audioController.ChangeSound();                                                                  //Play Hit sound
                 yield return new WaitForSeconds(.1f);
                 Vector3 forceDirection = (hit.transform.position - transform.position).normalized;              //set the direction the force will go towards
                 rb.AddForce(forceDirection * forceAmount, ForceMode.Impulse);                                   //Apply force to the enemy
@@ -186,23 +169,4 @@ public class NewMovement : MonoBehaviour
             animator.SetBool("isWalking", false);
         }
     }
-
-    public void ResetRotation()                                                                             //Did not end up using it because i was having a visual hitching but left it in to show you what i was trying to do
-    {                                                                                                       //Basically setting the rotation of the playerto the direction that the camera is looking towards. it works, just hitchy.
-        float horizontal = Input.GetAxis(horizontalAxis);
-        float vertical = Input.GetAxis(verticalAxis);
-
-        //Vector3 moveDirection = playerCam.forward * vertical + playerCam.right * horizontal;
-        Quaternion targetRotation = Quaternion.LookRotation(playerCam.forward, Vector3.up);
-
-        Vector3 eulerAngles = targetRotation.eulerAngles;
-        eulerAngles.x = 0;
-        eulerAngles.z = 0;
-        eulerAngles.y = eulerAngles.y - 90;
-        targetRotation = Quaternion.Euler(eulerAngles);
-
-        transform.rotation = targetRotation;
-    }
-
-    
 }
